@@ -1,0 +1,10 @@
+.navbar {
+    background-color: orange;
+    display: flex;
+
+}
+
+.navbar__logo {
+    width: 5rem;
+    height: 2rem;
+}
