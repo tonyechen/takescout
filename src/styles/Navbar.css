@@ -1,10 +1,32 @@
 .navbar {
     background-color: orange;
     display: flex;
-
+    align-items: center;
+    height: 3rem;
+    justify-content: space-between;
+    padding-left: 1rem;
 }
 
 .navbar__logo {
     width: 5rem;
     height: 2rem;
+}
+
+.navbar__tabs {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar__tab {
+    text-decoration: none;
+    color: white;
+    padding: 1rem 1rem;
+
+}
+
+.navbar__tab:hover {
+    background-color: yellow;
+    opacity: 0.7;
 }
