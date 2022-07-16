@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styles/Navbar.css';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
@@ -11,7 +10,7 @@ const Navbar = () => {
                 className="navbar__logo"
             />
             <div className="navbar__tabs">
-                <Link to="/login" className="navbar__tab">
+                <Link to="/about" className="navbar__tab">
                     About
                 </Link>
                 <Link to="/login" className="navbar__tab">
