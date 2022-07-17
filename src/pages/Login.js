@@ -1,5 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+
+const auth = getAuth();
+createUserWithEmailAndPassword();
 
 const Login = () => {
     return (
