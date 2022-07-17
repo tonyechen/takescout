@@ -2,14 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
-const auth = getAuth();
-createUserWithEmailAndPassword();
-
 const Login = () => {
     return (
         <div className="flex py-[5rem] justify-center">
             <div className="flex flex-col bg-slate-100 p-10 rounded-2xl shadow-zinc-500 shadow-xl">
-                <h1 className="text-2xl">Login</h1>
+                <h1 className="text-2xl m-auto">Login</h1>
                 <br />
                 <form className="">
                     <label for="email">Email</label>

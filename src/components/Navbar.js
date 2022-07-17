@@ -14,7 +14,7 @@ const Navbar = () => {
 
             <div className="flex align-middle">
                 <Tabs to="/about" name="About" />
-                <Tabs to="/login" name="Login/Signup" />
+                <Tabs to="/login" name="Login" />
             </div>
         </nav>
     );
