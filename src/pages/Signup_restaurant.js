@@ -10,18 +10,29 @@ const Signup_restaurant = () => {
                 <form className="">
                     <label for="email">Email</label>
                     <br />
-                    <input type="text" id="email" className="rounded w-[100%]" />
+                    <input
+                        required
+                        type="text"
+                        id="email"
+                        className="rounded w-[100%]"
+                    />
                     <br />
                     <br />
                     <label for="password">Password</label>
                     <br />
-                    <input type="password" id="password" className="rounded w-[100%]" />
+                    <input
+                        required
+                        type="password"
+                        id="password"
+                        className="rounded w-[100%]"
+                    />
                     <br />
                     <br />
                 </form>
-                <button className="rounded-xl cursor-pointer bg-orange-300 px-5 py-2 hover:opacity-75">
-                    Submit
-                </button>
+                <input
+                    type="submit"
+                    className="rounded-xl cursor-pointer bg-orange-300 px-5 py-2 w-[100%] hover:opacity-75"
+                />
                 <br />
                 <Link
                     to="/login"
