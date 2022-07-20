@@ -9,7 +9,7 @@ const Navbar = () => {
     const authentication = useRecoilValue(authState);
     console.log('authentication: ', authentication);
     return (
-        <nav className="flex justify-between bg-orange-300 text-white h-[3rem] pl-[1rem] align-middle">
+        <nav className="flex justify-between sticky top-0 bg-orange-300 text-white h-[3rem] pl-[1rem] align-middle">
             <Link to="/">
                 <img
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/ZDF_logo%21_Logo_2021.svg/1200px-ZDF_logo%21_Logo_2021.svg.png"

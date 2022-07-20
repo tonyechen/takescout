@@ -7,3 +7,7 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+input {
+    padding: 0 5px;
+}
