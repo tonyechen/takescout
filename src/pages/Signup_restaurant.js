@@ -1,19 +1,19 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, createUserWithEmailAndPassword } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import getPlaces from '../lib/getPlaces';
 import { debounce } from 'lodash';
-import { userAddressInfo } from '../atom/userInfo';
+import { userTypeState, userInfo } from '../atom/userInfo';
 import { useRecoilState } from 'recoil';
 import { db } from '../firebase';
-import { getDoc } from 'firebase/firestore';
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 const Signup_restaurant = () => {
     const navigate = useNavigate();
     const [displaySuggestion, setDisplaySuggestion] = useState(false);
     const [placeSuggestions, setPlaceSuggestions] = useState(null);
-    const [userAddress, setUserAddress] = useRecoilState(userAddressInfo);
+    const [userAddress, setUserAddress] = useState(null);
 
     const suggestPlaces = debounce(async () => {
         let place = document.getElementById('search_address').value;
@@ -27,18 +27,41 @@ const Signup_restaurant = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const firstName = document.getElementById('first_name').value;
+        const lastName = document.getElementById('last_name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const restaurant_name =
+            document.getElementById('restaurant_name').value;
 
         // create user
         createUserWithEmailAndPassword(auth, email, password)
             .then((auth) => {
                 console.log(auth);
+
+                const PartnerColRef = collection(db, 'Partners');
+                const RestaurantColRef = collection(db, 'Restaurants');
+
+                // add info to firestore
+                const partnerInfo = {
+                    first_name: firstName,
+                    last_name: lastName,
+                    address: userAddress,
+                    email: email,
+                    restaurant_name: restaurant_name,
+                    restaurant: doc(RestaurantColRef, auth.user.uid),
+                    user_type: 'partner',
+                };
+
+                // create Partner
+                setDoc(doc(PartnerColRef, auth.user.uid), partnerInfo);
+
+                window.localStorage.setItem('user_type', 'restaurant');
+                window.localStorage.setItem('user_info', partnerInfo);
+
                 navigate('/');
             })
             .catch((e) => alert(e.message));
-
-        // add more info to firestore
     };
 
     const handleAddress = (e, place) => {
@@ -104,6 +127,15 @@ const Signup_restaurant = () => {
                     />
                     <br />
 
+                    <label for="restaurant_name">Restaurant Name</label>
+                    <input
+                        required
+                        type="text"
+                        id="restaurant_name"
+                        className="rounded"
+                    />
+                    <br />
+
                     {/* Address */}
                     <h1>Restaruant Address</h1>
                     <div className="relative">
@@ -144,7 +176,12 @@ const Signup_restaurant = () => {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="col-span-2 flex flex-col w-[100%]">
                             <label for="address_line">Address Line</label>
-                            <input type="text" id="address_line" disabled />
+                            <input
+                                type="text"
+                                id="address_line"
+                                disabled
+                                required
+                            />
                         </div>
 
                         <div className="mr-2">
@@ -164,17 +201,23 @@ const Signup_restaurant = () => {
                                 id="state"
                                 className="w-[100%]"
                                 disabled
+                                required
                             />
                         </div>
 
                         <div className="col-span-2 flex flex-col w-[100%]">
                             <label for="zip_code">Postal/Zip Code</label>
-                            <input type="text" id="zip_code" disabled />
+                            <input
+                                type="text"
+                                id="zip_code"
+                                disabled
+                                required
+                            />
                         </div>
 
                         <div className="col-span-2 flex flex-col w-[100%]">
                             <label for="country">Country</label>
-                            <input type="text" id="country" disabled />
+                            <input type="text" id="country" disabled required />
                         </div>
                     </div>
                     <br />

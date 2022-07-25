@@ -1,10 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { auth, createUserWithEmailAndPassword } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import getPlaces from '../lib/getPlaces';
 import { debounce } from 'lodash';
-import { userAddressInfo } from '../atom/userInfo';
 import { useRecoilState } from 'recoil';
 import { db } from '../firebase';
 import { collection, doc, setDoc } from 'firebase/firestore';
@@ -13,8 +12,7 @@ const Signup_user = () => {
     const navigate = useNavigate();
     const [displaySuggestion, setDisplaySuggestion] = useState(false);
     const [placeSuggestions, setPlaceSuggestions] = useState(null);
-    const [userAddress, setUserAddress] = useRecoilState(userAddressInfo);
-    const userColRef = collection(db, 'Users');
+    const [userAddress, setUserAddress] = useState(null);
 
     const suggestPlaces = debounce(async () => {
         let place = document.getElementById('search_address').value;
@@ -34,14 +32,22 @@ const Signup_user = () => {
         // create user
         createUserWithEmailAndPassword(auth, email, password)
             .then((auth) => {
-                console.log(auth);
-                // add more info to firestore
+                const userColRef = collection(db, 'Users');
 
-                setDoc(doc(userColRef, auth.user.uid), {
+                // add info to firestore
+                const userInfo = {
                     first_name: firstName,
                     last_name: lastName,
                     address: userAddress,
-                });
+                    email: email,
+                    user_type: 'user',
+                };
+
+                setDoc(doc(userColRef, auth.user.uid), userInfo);
+
+                window.localStorage.setItem('user_type', 'user');
+                window.localStorage.setItem('user_info', userInfo);
+
                 navigate('/');
             })
             .catch((e) => alert(e.message));
@@ -150,7 +156,7 @@ const Signup_user = () => {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="col-span-2 flex flex-col w-[100%]">
                             <label for="address_line">Address Line</label>
-                            <input type="text" id="address_line" disabled />
+                            <input type="text" id="address_line" required />
                         </div>
 
                         <div className="mr-2">
@@ -159,7 +165,7 @@ const Signup_user = () => {
                                 type="text"
                                 id="city"
                                 className="w-[100%]"
-                                disabled
+                                required
                             />
                         </div>
 
@@ -169,18 +175,18 @@ const Signup_user = () => {
                                 type="text"
                                 id="state"
                                 className="w-[100%]"
-                                disabled
+                                required
                             />
                         </div>
 
                         <div className="col-span-2 flex flex-col w-[100%]">
                             <label for="zip_code">Postal/Zip Code</label>
-                            <input type="text" id="zip_code" disabled />
+                            <input type="text" id="zip_code" required />
                         </div>
 
                         <div className="col-span-2 flex flex-col w-[100%]">
                             <label for="country">Country</label>
-                            <input type="text" id="country" disabled />
+                            <input type="text" id="country" required />
                         </div>
                     </div>
                     <br />

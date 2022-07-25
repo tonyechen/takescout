@@ -1,9 +1,14 @@
+import { collection, doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, signInWithEmailAndPassword } from '../firebase';
+import { useRecoilState } from 'recoil';
+import { userTypeState } from '../atom/userInfo';
 
 const Login = () => {
     let navigate = useNavigate();
+    const [userType, setUserType] = useRecoilState(userTypeState);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -16,9 +21,34 @@ const Login = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((auth) => {
                 console.log(auth);
-                navigate('/');
+                getDoc(doc(collection(db, 'Users'), auth.user.uid))
+                    .then((response) => {
+                        console.log(response.data());
+                        if (response.data()) {
+                            window.localStorage.setItem('user_type', 'user');
+                            setUserType('user');
+
+                            navigate('/');
+                        } else {
+                            getDoc(
+                                doc(collection(db, 'Partners'), auth.user.uid)
+                            ).then((response) => {
+                                window.localStorage.setItem(
+                                    'user_type',
+                                    'restaurant'
+                                );
+                                setUserType('restaurant');
+                                navigate('/');
+                            });
+                        }
+                    })
+                    .catch((e) => {
+                        alert(e.message);
+                    });
             })
-            .catch((e) => alert(e.message));
+            .catch((e) => {
+                alert(e.message);
+            });
     }
 
     return (
