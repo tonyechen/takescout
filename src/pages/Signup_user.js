@@ -46,7 +46,7 @@ const Signup_user = () => {
                 setDoc(doc(userColRef, auth.user.uid), userInfo);
 
                 window.localStorage.setItem('user_type', 'user');
-                window.localStorage.setItem('user_info', userInfo);
+                window.localStorage.setItem('uid', auth.user.uid);
 
                 navigate('/');
             })

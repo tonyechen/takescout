@@ -24,6 +24,9 @@ const Login = () => {
                 getDoc(doc(collection(db, 'Users'), auth.user.uid))
                     .then((response) => {
                         console.log(response.data());
+                        // store user id
+                        window.localStorage.setItem('uid', auth.user.uid);
+
                         if (response.data()) {
                             window.localStorage.setItem('user_type', 'user');
                             setUserType('user');

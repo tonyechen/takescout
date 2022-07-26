@@ -40,7 +40,6 @@ const Signup_restaurant = () => {
                 console.log(auth);
 
                 const PartnerColRef = collection(db, 'Partners');
-                const RestaurantColRef = collection(db, 'Restaurants');
 
                 // add info to firestore
                 const partnerInfo = {
@@ -49,7 +48,6 @@ const Signup_restaurant = () => {
                     address: userAddress,
                     email: email,
                     restaurant_name: restaurant_name,
-                    restaurant: doc(RestaurantColRef, auth.user.uid),
                     user_type: 'partner',
                 };
 
@@ -57,7 +55,7 @@ const Signup_restaurant = () => {
                 setDoc(doc(PartnerColRef, auth.user.uid), partnerInfo);
 
                 window.localStorage.setItem('user_type', 'restaurant');
-                window.localStorage.setItem('user_info', partnerInfo);
+                window.localStorage.setItem('uid', auth.user.uid);
 
                 navigate('/');
             })

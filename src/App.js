@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Welcome from './pages/Welcome';
 import Navbar from './components/Navbar';
@@ -13,19 +13,26 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { authState } from './atom/auth';
-import { userTypeState } from './atom/userInfo';
+import { userInfo, userTypeState, userUID } from './atom/userInfo';
+import Restaurant_profile from './pages/Restaurant_profile';
+import useUserInfos from './hooks/useUserInfos';
 
 function App() {
     const [authentication, setAuth] = useRecoilState(authState);
     const [userType, setUserType] = useRecoilState(userTypeState);
+    const [userID, setUserId] = useRecoilState(userUID);
+    useUserInfos();
 
     onAuthStateChanged(auth, (user) => {
         console.log('user status changed: ', user);
         if (user) {
             setAuth(true);
             setUserType(window.localStorage.getItem('user_type'));
+            setUserId(window.localStorage.getItem('uid'));
         } else {
             setAuth(false);
+            window.localStorage.removeItem('user_type');
+            window.localStorage.removeItem('uid');
         }
     });
 
@@ -53,7 +60,23 @@ function App() {
                     <Route path="user" element={<Signup_user />} />
                     <Route path="restaurant" element={<Signup_restaurant />} />
                 </Route>
-                <Route path="*" />
+                {authentication && (
+                    <>
+                        <Route
+                            path="/profile/user/:id"
+                            element={<Restaurant_profile />}
+                        />
+
+                        <Route
+                            path="/restaurant/:id"
+                            element={<Restaurant_profile />}
+                        />
+                    </>
+                )}
+                <Route
+                    path="*"
+                    element={<div>404. this page does not exist</div>}
+                />
             </Routes>
         </BrowserRouter>
     );
