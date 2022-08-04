@@ -63,7 +63,7 @@ const EditFood = (props) => {
             });
         }
 
-        setCanEdit(true);
+        setCanEdit(false);
     };
 
     return (
