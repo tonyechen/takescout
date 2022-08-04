@@ -62,6 +62,8 @@ const EditFood = (props) => {
                 addMenuItem: addMenuItem,
             });
         }
+
+        setCanEdit(true);
     };
 
     return (
