@@ -21,10 +21,12 @@ function App() {
     const [authentication, setAuth] = useRecoilState(authState);
     const [userType, setUserType] = useRecoilState(userTypeState);
     const [userID, setUserId] = useRecoilState(userUID);
+
+    // automatically fetch and update user Info
     useUserInfos();
 
+    // handle auth changes and keep track of global state for user_type and uid
     onAuthStateChanged(auth, (user) => {
-        console.log('user status changed: ', user);
         if (user) {
             setAuth(true);
             setUserType(window.localStorage.getItem('user_type'));
@@ -60,6 +62,8 @@ function App() {
                     <Route path="user" element={<Signup_user />} />
                     <Route path="restaurant" element={<Signup_restaurant />} />
                 </Route>
+
+                {/* Only route to these paths when user are authenticated */}
                 {authentication && (
                     <>
                         <Route

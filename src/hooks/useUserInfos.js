@@ -4,6 +4,7 @@ import { userInfo, userTypeState, userUID } from '../atom/userInfo';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { collection, doc, getDoc } from 'firebase/firestore';
 
+// automatically fetch user's profile info
 const useUserInfos = () => {
     const [userInfos, setUserInfos] = useRecoilState(userInfo);
     const userType = useRecoilValue(userTypeState);
@@ -17,7 +18,17 @@ const useUserInfos = () => {
                 });
             } else {
                 getDoc(doc(collection(db, 'Partners'), userID)).then((res) => {
-                    setUserInfos(res.data());
+                    const data = res.data();
+
+                    const partnerInfo = {
+                        first_name: data.first_name,
+                        last_name: data.last_name,
+                        address: data.address,
+                        email: data.email,
+                        restaurant_name: data.restaurant_name,
+                    };
+                    
+                    setUserInfos(partnerInfo);
                 });
             }
         }

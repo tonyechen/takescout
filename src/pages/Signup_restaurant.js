@@ -39,7 +39,18 @@ const Signup_restaurant = () => {
             .then((auth) => {
                 console.log(auth);
 
-                const PartnerColRef = collection(db, 'Partners');
+                const PartnerDocRef = doc(db, 'Partners', auth.user.uid);
+                const restaurantDocRef = doc(
+                    db,
+                    'Restaurants',
+                    userAddress.country_code,
+                    'States',
+                    userAddress.state,
+                    'Cities',
+                    userAddress.city,
+                    'Restaurants',
+                    auth.user.uid
+                );
 
                 // add info to firestore
                 const partnerInfo = {
@@ -49,15 +60,16 @@ const Signup_restaurant = () => {
                     email: email,
                     restaurant_name: restaurant_name,
                     user_type: 'partner',
+                    restaurant_doc_ref: restaurantDocRef,
                 };
 
                 // create Partner
-                setDoc(doc(PartnerColRef, auth.user.uid), partnerInfo);
+                setDoc(PartnerDocRef, partnerInfo);
 
                 window.localStorage.setItem('user_type', 'restaurant');
                 window.localStorage.setItem('uid', auth.user.uid);
 
-                navigate('/');
+                navigate(`/restaurant/${auth.user.uid}`);
             })
             .catch((e) => alert(e.message));
     };
