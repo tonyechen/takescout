@@ -2,9 +2,11 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import React from 'react';
 import NavTab from './NavTab';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const UserNav = () => {
+    const navigate = useNavigate();
+
     return (
         <nav className="flex justify-between sticky top-0 bg-orange-300 text-white h-[3rem] pl-[1rem] align-middle">
             <Link to="/">
@@ -18,9 +20,21 @@ const UserNav = () => {
             <div className="flex align-middle">
                 <NavTab to="/about" name="About" />
 
+                <NavTab to="/orders" name="Orders" />
+
+                {/* Shopping Cart */}
+                <button
+                    onClick={() => {}}
+                    className="flex items-center px-[1rem] h-auto hover:bg-yellow-200"
+                >
+                    <p>Shopping Cart {}</p>
+                </button>
+
+                {/* Signout Button */}
                 <button
                     onClick={() => {
                         signOut(auth);
+                        navigate('/');
                     }}
                     className="flex items-center px-[1rem] h-auto hover:bg-yellow-200"
                 >
