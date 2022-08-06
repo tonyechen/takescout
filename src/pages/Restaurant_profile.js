@@ -2,7 +2,8 @@ import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { userUID } from '../atom/userInfo';
+import { userTypeState, userUID } from '../atom/userInfo';
+import AddToChart from '../components/AddToChart';
 import EditFood from '../components/EditFood';
 import Food from '../components/Food';
 import { db } from '../firebase';
@@ -10,6 +11,7 @@ import { db } from '../firebase';
 const Restaurant_profile = () => {
     // global state value
     const currentUserID = useRecoilValue(userUID);
+    const userType = useRecoilValue(userTypeState);
 
     // component state
     const restaurant_id = useParams().id;
@@ -43,7 +45,12 @@ const Restaurant_profile = () => {
 
         setMenu(filteredMenu);
 
-        setDoc(restaurantDocRef, { ...restaurant, menu: filteredMenu });
+        setDoc(restaurantDocRef, {
+            ...restaurant,
+            menu: filteredMenu,
+            restaurant_name: restaurantInfo.restaurant_name,
+            address: `${restaurantInfo.address.address_line1}, ${restaurantInfo.address.city}`,
+        });
         setCanEdit(false);
     };
 
@@ -133,15 +140,22 @@ const Restaurant_profile = () => {
                         <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 md:min-w-[900px] max-w-[900px]">
                             {menu.map((item, i) => {
                                 return (
-                                    <Food
+                                    <div
                                         key={item.name}
-                                        image={item.image}
-                                        name={item.name}
-                                        description={item.description}
-                                        price={item.price}
-                                        addMenuItem={addMenuItem.bind(this)}
-                                        id={i}
-                                    />
+                                        className="flex flex-col justify-between"
+                                    >
+                                        <Food
+                                            image={item.image}
+                                            name={item.name}
+                                            description={item.description}
+                                            price={item.price}
+                                            addMenuItem={addMenuItem.bind(this)}
+                                            id={i}
+                                        />
+                                        {userType === 'user' && (
+                                            <AddToChart food={item} />
+                                        )}
+                                    </div>
                                 );
                             })}
                         </div>

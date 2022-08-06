@@ -3,8 +3,12 @@ import { auth } from '../firebase';
 import React from 'react';
 import NavTab from './NavTab';
 import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { shoppingCart } from '../atom/cart';
 
 const UserNav = () => {
+    const [cart, setCart] = useRecoilState(shoppingCart);
+
     const navigate = useNavigate();
 
     return (
@@ -27,7 +31,7 @@ const UserNav = () => {
                     onClick={() => {}}
                     className="flex items-center px-[1rem] h-auto hover:bg-yellow-200"
                 >
-                    <p>Shopping Cart {}</p>
+                    <p>Shopping Cart: {cart.length}</p>
                 </button>
 
                 {/* Signout Button */}
