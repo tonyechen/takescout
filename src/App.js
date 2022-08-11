@@ -16,6 +16,7 @@ import { authState } from './atom/auth';
 import { userInfo, userTypeState, userUID } from './atom/userInfo';
 import Restaurant_profile from './pages/Restaurant_profile';
 import useUserInfos from './hooks/useUserInfos';
+import ShoppingCart from './pages/ShoppingCart';
 
 function App() {
     const [authentication, setAuth] = useRecoilState(authState);
@@ -75,6 +76,17 @@ function App() {
                             path="/restaurant/:id"
                             element={<Restaurant_profile />}
                         />
+
+                        {userType && userType == 'user' ? (
+                            // Routes for users 
+                            <Route
+                                path="/cart"
+                                element={<ShoppingCart />}
+                            />
+                        ) : (
+                            // Routes for restaurant owners
+                            <Route />
+                        )}
                     </>
                 )}
                 <Route

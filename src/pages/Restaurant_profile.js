@@ -30,7 +30,7 @@ const Restaurant_profile = () => {
         newMenu[id] = {
             image: image,
             name: name,
-            price: price,
+            price: parseFloat(price),
             description: description,
         };
         setMenu(newMenu);
@@ -153,7 +153,12 @@ const Restaurant_profile = () => {
                                             id={i}
                                         />
                                         {userType === 'user' && (
-                                            <AddToChart food={item} />
+                                            <AddToChart
+                                                food={item}
+                                                restaurantRef={
+                                                    restaurantInfo.restaurant_doc_ref.path
+                                                }
+                                            />
                                         )}
                                     </div>
                                 );

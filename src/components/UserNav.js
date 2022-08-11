@@ -28,7 +28,9 @@ const UserNav = () => {
 
                 {/* Shopping Cart */}
                 <button
-                    onClick={() => {}}
+                    onClick={() => {
+                        navigate('/cart');
+                    }}
                     className="flex items-center px-[1rem] h-auto hover:bg-yellow-200"
                 >
                     <p>Shopping Cart: {cart.length}</p>
