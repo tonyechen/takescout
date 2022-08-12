@@ -46,16 +46,15 @@ const EditFood = (props) => {
             });
         } else {
             // the parent component doesn't trigger rerender after updating
-            image = newImage;
             name = newName;
             description = newDescription;
             price = newPrice;
 
-            props.addMenuItem(id, newImage, newName, newPrice, newDescription);
+            props.addMenuItem(id, image, newName, newPrice, newDescription);
 
             setState({
                 id: id,
-                image: newImage,
+                image: image,
                 name: newName,
                 price: newPrice,
                 description: newDescription,
@@ -112,7 +111,7 @@ const EditFood = (props) => {
                             <input
                                 type="text"
                                 id="name"
-                                value={name}
+                                defaultValue={name}
                                 required
                                 className="w-[70%] border"
                             />
@@ -123,7 +122,7 @@ const EditFood = (props) => {
                             <input
                                 type="text"
                                 id="price"
-                                value={price}
+                                defaultValue={price}
                                 required
                                 className="w-[70%] border"
                             />
@@ -136,7 +135,7 @@ const EditFood = (props) => {
                             <textarea
                                 type="paragraph"
                                 id="description"
-                                value={description}
+                                defaultValue={description}
                                 className="w-[70%] min-h-min border"
                             />
                         </div>
