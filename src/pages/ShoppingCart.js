@@ -46,10 +46,24 @@ const ShoppingCart = () => {
             </div>
             <div className="relative">
                 <div className="sticky top-[3rem]">
-                    <p className="text-xl">Order Total: {total.toFixed(2)}</p>
+                    <p className="text-xl mb-5">
+                        Order Total: {total.toFixed(2)}
+                    </p>
 
-                    <Link to="/checkout">
-                        <a className='bg-gray-300 rounded-2xl px-5 py-2 mt-10'>Checkout</a>
+                    <Link
+                        to="/checkout"
+                        className="bg-gray-300 rounded-2xl px-5 py-2"
+                    >
+                        Checkout
+                    </Link>
+
+                    <p className="my-5">Deliver for someone else for a discount!</p>
+
+                    <Link
+                        to="/pairing"
+                        className="bg-gray-300 rounded-2xl px-5 py-2 my-10"
+                    >
+                        I want to Deliver!
                     </Link>
                 </div>
             </div>
