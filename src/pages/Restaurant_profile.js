@@ -156,7 +156,11 @@ const Restaurant_profile = () => {
                                             <AddToChart
                                                 food={item}
                                                 restaurantRef={
-                                                    restaurantInfo.restaurant_doc_ref.path
+                                                    restaurantInfo
+                                                        .restaurant_doc_ref.path
+                                                }
+                                                restaurant_name={
+                                                    restaurantInfo.restaurant_name
                                                 }
                                             />
                                         )}

@@ -20,19 +20,20 @@ const Payment = () => {
 
     let total = 0.0;
     cart.forEach((item) => (total += parseFloat(item.price)));
+    let totalInCents = Math.round(total * 100)
 
     useEffect(() => {
         const getClientSecret = async (total) => {
             const response = await axios({
                 method: 'post',
                 // Stripe expects the total in a curencies subunits
-                url: `/payments/create?total=${total * 100}`,
+                url: `/payments/create?total=${total}`,
             });
             console.log('client secrets:', response);
             setClientSecret(response.data.clientSecret);
         };
 
-        getClientSecret(total);
+        getClientSecret(totalInCents);
     }, [cart]);
 
     useEffect(() => {
@@ -45,7 +46,9 @@ const Payment = () => {
     };
 
     return (
-        <div className="max-w-[900px] m-auto">
+        <div className="max-w-[900px] m-auto p-5">
+            <h1 className="text-3xl text-center mt-10">Order Summary:</h1>
+            <br />
             <div className="">
                 {cart.map((item, i) => {
                     return (
@@ -59,8 +62,8 @@ const Payment = () => {
                     );
                 })}
                 <div className="flex justify-between">
-                    <h1 className='text-xl'>Order total:</h1>
-                    <p>{total}</p>
+                    <h1 className="text-xl">Order total:</h1>
+                    <p>{total.toFixed(2)}</p>
                 </div>
             </div>
             <div className="mt-10">
