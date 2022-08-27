@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { shoppingCart } from '../atom/cart';
+import { deliveryType, shoppingCart } from '../atom/cart';
 import Food from '../components/Food';
 import { Link } from 'react-router-dom';
 
 const ShoppingCart = () => {
     const [cart, setCart] = useRecoilState(shoppingCart);
+    const [type, setType] = useRecoilState(deliveryType)
 
     const [total, setTotal] = useState(0.0);
 
@@ -53,15 +54,23 @@ const ShoppingCart = () => {
                     <Link
                         to="/checkout"
                         className="bg-gray-300 rounded-2xl px-5 py-2"
+                        onClick={() => {
+                            setType('recipient');
+                        }}
                     >
                         Checkout
                     </Link>
 
-                    <p className="my-5">Deliver for someone else for a discount!</p>
+                    <p className="my-5">
+                        Deliver for someone else for a discount!
+                    </p>
 
                     <Link
-                        to="/pairing"
+                        to="/checkout"
                         className="bg-gray-300 rounded-2xl px-5 py-2 my-10"
+                        onClick={() => {
+                            setType('deliverer');
+                        }}
                     >
                         I want to Deliver!
                     </Link>

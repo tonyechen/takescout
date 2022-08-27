@@ -3,7 +3,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from '../axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { shoppingCart } from '../atom/cart';
+import { deliveryType, shoppingCart } from '../atom/cart';
 import { useRecoilValue } from 'recoil';
 import CheckoutForm from '../components/CheckoutForm';
 import Food from '../components/Food';
@@ -18,8 +18,15 @@ const Payment = () => {
     const [, setTotal] = useState(0.0);
     const [clientSecret, setClientSecret] = useState('');
 
+    const type = useRecoilValue(deliveryType);
+
     let total = 0.0;
     cart.forEach((item) => (total += parseFloat(item.price)));
+
+    if (type == 'deliverer') {
+        total *= 0.85;
+    }
+
     let totalInCents = Math.round(total * 100)
 
     useEffect(() => {
@@ -61,6 +68,20 @@ const Payment = () => {
                         </>
                     );
                 })}
+                {type == 'deliverer' && (
+                    <>
+                        <div className="flex justify-between">
+                            <p>
+                                <b>Discount</b>
+                            </p>
+                            <p>
+                                <b>{-(total * 0.176).toFixed(2)}</b>
+                            </p>
+                        </div>
+                        <hr />
+                    </>
+                )}
+
                 <div className="flex justify-between">
                     <h1 className="text-xl">Order total:</h1>
                     <p>{total.toFixed(2)}</p>

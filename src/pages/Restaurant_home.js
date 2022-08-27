@@ -1,4 +1,4 @@
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { userInfo, userUID } from '../atom/userInfo';
 import { useRecoilValue } from 'recoil';
@@ -12,8 +12,9 @@ const Restaurant_home = () => {
         getDoc(doc(db, 'Partners', restaurantID)).then((res) => {
             const restaurant_doc_ref = res.data().restaurant_doc_ref;
             onSnapshot(restaurant_doc_ref, (doc) => {
-                console.log(doc.data());
-                setOrders(doc.data().orders);
+                getDocs(collection(restaurant_doc_ref, 'orders')).then(res => {
+                    console.log(res.docs)
+                })
             });
         });
     }, [restaurantID]);
