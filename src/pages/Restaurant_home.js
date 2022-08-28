@@ -1,4 +1,12 @@
-import { collection, doc, getDoc, getDocs, onSnapshot } from 'firebase/firestore';
+import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    onSnapshot,
+    orderBy,
+    query,
+} from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { userInfo, userUID } from '../atom/userInfo';
 import { useRecoilValue } from 'recoil';
@@ -12,25 +20,66 @@ const Restaurant_home = () => {
         getDoc(doc(db, 'Partners', restaurantID)).then((res) => {
             const restaurant_doc_ref = res.data().restaurant_doc_ref;
             onSnapshot(restaurant_doc_ref, (doc) => {
-                getDocs(collection(restaurant_doc_ref, 'orders')).then(res => {
-                    console.log(res.docs)
-                })
+                getDocs(
+                    query(
+                        collection(restaurant_doc_ref, 'orders'),
+                        orderBy('time', 'desc')
+                    )
+                ).then((res) => {
+                    setOrders(res.docs);
+                });
             });
         });
     }, [restaurantID]);
 
-    return <div>
-        {orders && orders.map((order) => {
-            console.log(order);
-            return <div>
-                <img src={order.food.image} alt="" className='w-[200px] h-auto'/>
-                <p>{order.customer}</p>
-                <p>{order.address.address_line1}, {order.address.address_line2}</p>
-                <p>{order.food.name}</p>
-                <button className='px-5 py-2 bg-green-300 rounded-2xl'>finished</button>
-            </div>
-        })}
-    </div>;
+    const handleFinishedOrder = (orderDocRef) => {
+        console.log('yay');
+    }
+
+    return (
+        <div>
+            {orders &&
+                orders.map((order) => {
+                    console.log(order.data());
+                    return (
+                        <>
+                            <p>{order.data().items[0].customer}</p>
+                            <p>{order.data().items[0].type}</p>
+                            <p>
+                                {new Date(
+                                    order.data().time.seconds
+                                ).toTimeString()}
+                            </p>
+                            <div className="grid grid-cols-3">
+                                {order.data().items.map((item) => {
+                                    return (
+                                        <div>
+                                            <img
+                                                src={item.food.image}
+                                                alt=""
+                                                className="w-40 h-40 object-cover"
+                                            />
+                                            <p>{item.food.name}</p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <button
+                                className="px-5 py-2 bg-green-300 rounded-2xl"
+                                onClick={() =>
+                                    handleFinishedOrder(
+                                        order.data().items[0].orderDocRef
+                                    )
+                                }
+                            >
+                                finished
+                            </button>
+                            <hr />
+                        </>
+                    );
+                })}
+        </div>
+    );
 };
 
 export default Restaurant_home;
