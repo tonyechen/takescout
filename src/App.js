@@ -90,6 +90,7 @@ function App() {
                                 <Route path="/checkout" element={<Payment />} />
                                 <Route path="/pairing" element={<Pairing />} />
                                 <Route path="/orders" element={<Orders />} />
+                                <Route path="/orders/:id" element={<Pairing />} />
                             </>
                         ) : (
                             // Routes for restaurant owners

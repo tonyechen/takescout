@@ -1,8 +1,12 @@
 import React from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Order = (props) => {
+    const navigate = useNavigate();
+
     const dateObject = new Date(props.order.time.seconds * 1000);
+    console.log(props.order);
     return (
         <div>
             <p>
@@ -23,7 +27,11 @@ const Order = (props) => {
                     );
                 })}
             </div>
-            {!props.order.isComplete && <button className='bg-gray-300 px-8 py-2 rounded-xl'>Status</button>}
+            {!props.order.isComplete && <button className='bg-gray-300 px-8 py-2 rounded-xl' onClick={
+                () => {
+                    navigate(`/orders/${props.id}`);
+                }
+            }>Status</button>}
         </div>
     );
 };

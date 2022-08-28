@@ -16,6 +16,7 @@ import {
 import { db } from '../firebase';
 import { userInfo, userUID } from '../atom/userInfo';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const CheckoutForm = ({total}) => {
     const stripe = useStripe();
@@ -55,6 +56,7 @@ const CheckoutForm = ({total}) => {
                         type: type,
                         isComplete: false,
                         total: total,
+                        deliverer: null,
                     }).then((res) => {
                         let organizedCart = new Map(); //organize by restaurant and minimize post requests
                         cart.forEach((item) => {
@@ -68,7 +70,6 @@ const CheckoutForm = ({total}) => {
                                 {
                                     customer: `${user.first_name} ${user.last_name}`,
                                     orderDocRef: res.path,
-                                    type: type,
                                     food: item,
                                 },
                             ]);
@@ -82,10 +83,15 @@ const CheckoutForm = ({total}) => {
                                 db,
                                 newOrders[0].food.restaurantRef
                             );
-                            addDoc(collection(restaurantDocRef, 'queue'), {
+                            
+                            let orderType = type == 'deliverer' ? 'orders' : 'queue';
+
+                            addDoc(collection(restaurantDocRef, orderType), {
                                 items: [...newOrders],
                                 time: serverTimestamp(),
                                 address: user.address,
+                                type: type,
+                                deliverer: null,
                             })
                                 .then((res) => {
                                     console.log(res);
@@ -95,7 +101,7 @@ const CheckoutForm = ({total}) => {
                             restaurant = iterator.next().value;
 
                             if (!restaurant) {
-                                navigate('/pairing');
+                                navigate(`/orders/${res.id}`);
                                 setCart([]);
                             }
                         }

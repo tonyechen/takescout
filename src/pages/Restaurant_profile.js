@@ -162,6 +162,7 @@ const Restaurant_profile = () => {
                                                 restaurant_name={
                                                     restaurantInfo.restaurant_name
                                                 }
+                                                restaurant_address={restaurantInfo.address}
                                             />
                                         )}
                                     </div>

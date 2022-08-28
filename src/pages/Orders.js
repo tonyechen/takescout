@@ -1,4 +1,5 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { sortBy } from 'lodash';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -13,15 +14,16 @@ const Orders = () => {
     const userOrdersColRef = collection(db, 'Users', uid, 'orders');
 
     useEffect(() => {
-        getDocs(userOrdersColRef).then((res) => {
+        getDocs(query(userOrdersColRef, orderBy('time', 'desc'))).then((res) => {
             setOrders(res.docs);
+            console.log(res.docs);
         });
     }, []);
 
     return (
         <div className="max-w-[900px] m-auto p-5">
             {orders?.map((order) => {
-                return <Order order={order.data()} />;
+                return <Order order={order.data()} id={order.id}/>;
             })}
         </div>
     );
