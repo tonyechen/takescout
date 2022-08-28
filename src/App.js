@@ -19,6 +19,7 @@ import useUserInfos from './hooks/useUserInfos';
 import ShoppingCart from './pages/ShoppingCart';
 import Payment from './pages/Payment';
 import Pairing from './pages/Pairing';
+import Orders from './pages/Orders';
 
 function App() {
     const [authentication, setAuth] = useRecoilState(authState);
@@ -88,6 +89,7 @@ function App() {
                                 />
                                 <Route path="/checkout" element={<Payment />} />
                                 <Route path="/pairing" element={<Pairing />} />
+                                <Route path="/orders" element={<Orders />} />
                             </>
                         ) : (
                             // Routes for restaurant owners

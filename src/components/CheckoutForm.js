@@ -17,7 +17,7 @@ import { db } from '../firebase';
 import { userInfo, userUID } from '../atom/userInfo';
 import { useNavigate } from 'react-router-dom';
 
-const CheckoutForm = () => {
+const CheckoutForm = ({total}) => {
     const stripe = useStripe();
     const elements = useElements();
 
@@ -51,9 +51,10 @@ const CheckoutForm = () => {
                     const userDocRef = doc(db, 'Users', uid);
                     addDoc(collection(userDocRef, 'orders'), {
                         orders: cart,
-                        time: new Date(),
+                        time: serverTimestamp(),
                         type: type,
                         isComplete: false,
+                        total: total,
                     }).then((res) => {
                         let organizedCart = new Map(); //organize by restaurant and minimize post requests
                         cart.forEach((item) => {
@@ -83,7 +84,7 @@ const CheckoutForm = () => {
                             );
                             addDoc(collection(restaurantDocRef, 'queue'), {
                                 items: [...newOrders],
-                                time: new Date(),
+                                time: serverTimestamp(),
                                 address: user.address,
                             })
                                 .then((res) => {
