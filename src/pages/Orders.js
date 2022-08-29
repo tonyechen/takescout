@@ -9,7 +9,7 @@ import { db } from '../firebase';
 
 const Orders = () => {
     const uid = useRecoilValue(userUID);
-    const [orders, setOrders] = useState(null);
+    const [orders, setOrders] = useState([]);
 
     const userOrdersColRef = collection(db, 'Users', uid, 'orders');
 

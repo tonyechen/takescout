@@ -13,7 +13,8 @@ const Pairing = () => {
 
     const orderDocRef = doc(db, 'Users', uid, 'orders', orderID);
 
-    const [data, setData] = useState({});
+    const [data, setData] = useState(null);
+    console.log(data);
 
     useEffect(() => {
         onSnapshot(orderDocRef, (doc) => {
@@ -23,16 +24,18 @@ const Pairing = () => {
 
     return (
         <div>
-            <p>You are a: {data.type}</p>
-            {data.type == 'recipient' ? (
-              // recipient interface
+            <p>You are a: {data?.type}</p>
+            {data?.type == 'recipient' ? (
+                // recipient interface
                 <div>
-                    {data.deliverer || <p>Waiting for Deliverer...</p>}
+                    {data.deliverer != null || <p>Waiting for Deliverer...</p>}
                     {data.deliverer && <RecipientPairing data={data} />}
                 </div>
             ) : (
-              // deliverer interface
-                <DelivererPairing data={data}/>
+                // deliverer interface
+                <div>
+                    <DelivererPairing data={data} orderDocRef={orderDocRef} />
+                </div>
             )}
         </div>
     );
