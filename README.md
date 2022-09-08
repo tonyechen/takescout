@@ -1,3 +1,6 @@
+## Built with:
+React, Recoil, Express/Node.js, Firebase, TailwindCSS, Stripe, Google Maps API, Geoapify API, Axios
+
 # Getting Started with the App
 ## Running the frontend:
 ````
